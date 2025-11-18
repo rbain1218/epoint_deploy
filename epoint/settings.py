@@ -43,11 +43,11 @@ WSGI_APPLICATION = 'epoint.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3'),
+        default=os.environ.get("postgres://myuser:3fxCHCWReSbWiE5RYmSOqbdXSLJtcKMo@dpg-d4dt2ere5dus73c6o0q0-a:5432/mydb_r2xo"),
         conn_max_age=600,
+        ssl_require=False
     )
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -76,6 +76,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'rbain1218@gmail.com'       # Your Gmail address
-EMAIL_HOST_PASSWORD = 'qrio eyap sngx jecw'    # App password (recommended)
+EMAIL_HOST_USER = 'krishnapramanikram259@gmail.com'
+EMAIL_HOST_PASSWORD = 'poix habg foxt bgdg'    
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
