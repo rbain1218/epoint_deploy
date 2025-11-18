@@ -42,12 +42,13 @@ WSGI_APPLICATION = 'epoint.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("postgres://myuser:3fxCHCWReSbWiE5RYmSOqbdXSLJtcKMo@dpg-d4dt2ere5dus73c6o0q0-a:5432/mydb_r2xo"),
+    "default": dj_database_url.parse(
+        os.environ.get("DATABASE_URL"),
         conn_max_age=600,
         ssl_require=False
     )
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
