@@ -11,7 +11,8 @@ def home(request):
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    return render(request, 'shop/product_detail.html', {'product': product})
+    related_products = Product.objects.filter(category=product.category).exclude(id=product.id)[:4] if product.category else []
+    return render(request, 'shop/product_detail.html', {'product': product, 'related_products': related_products})
 
 @login_required
 def sell_product(request):
