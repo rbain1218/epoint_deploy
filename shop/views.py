@@ -15,6 +15,10 @@ def product_detail(request, pk):
 
 @login_required
 def sell_product(request):
+    if not request.user.is_superuser:
+        messages.error(request, "Only admins can sell products.")
+        return redirect('shop:home')
+        
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
@@ -26,6 +30,8 @@ def sell_product(request):
     else:
         form = ProductForm()
     return render(request, 'shop/sell.html', {'form': form})
+
+
 
 @login_required
 def add_to_cart(request, pk):

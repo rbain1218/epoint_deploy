@@ -3,7 +3,30 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from shop.models import Product
 from .models import Message
+from django.contrib.auth.models import User
 from .forms import MessageForm
+
+@login_required
+def contact_admin(request):
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            # Assuming the first superuser is the admin
+            admin = User.objects.filter(is_superuser=True).first()
+            if admin:
+                Message.objects.create(
+                    sender=request.user,
+                    receiver=admin,
+                    product=None,
+                    content=form.cleaned_data['content']
+                )
+                messages.success(request, 'Message sent to admin.')
+                return redirect('shop:home')
+            else:
+                messages.error(request, 'Admin not found.')
+    else:
+        form = MessageForm()
+    return render(request, 'messaging/contact_admin.html', {'form': form})
 
 @login_required
 def message_to_seller(request, product_id):

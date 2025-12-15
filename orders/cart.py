@@ -24,14 +24,16 @@ class Cart:
 
     def clear(self):
         self.session['cart'] = {}
+        self.cart = self.session['cart']
         self.session.modified = True
 
     def __iter__(self):
         for pid, item in self.cart.items():
-            item['id'] = int(pid)
-            item['price'] = Decimal(item['price'])
-            item['subtotal'] = item['price'] * item['quantity']
-            yield item
+            _item = item.copy()
+            _item['id'] = int(pid)
+            _item['price'] = Decimal(item['price'])
+            _item['subtotal'] = _item['price'] * _item['quantity']
+            yield _item
 
     def total(self):
         return sum(item['price'] * item['quantity'] for item in self.__iter__())
