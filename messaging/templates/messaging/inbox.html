@@ -2,35 +2,39 @@
 {% load static %}
 {% block content %}
 <style>
-/* ===== Card Styling ===== */
-.card {
-  border: none;
-  border-radius: 0.75rem;
-  box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.05);
-}
+  /* ===== Card Styling ===== */
+  .card {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.05);
+  }
 
-/* ===== Message Item ===== */
-.message-card {
-  transition: background-color 0.2s ease-in-out;
-}
-.message-card:hover {
-  background-color: #f8f9fa;
-}
-.message-header {
-  font-size: 0.95rem;
-}
-.message-header strong {
-  color: #212529;
-}
-.message-header .text-muted {
-  font-size: 0.85rem;
-}
+  /* ===== Message Item ===== */
+  .message-card {
+    transition: background-color 0.2s ease-in-out;
+  }
 
-/* ===== Empty State ===== */
-.alert-info {
-  border-radius: 0.5rem;
-  font-size: 0.95rem;
-}
+  .message-card:hover {
+    background-color: #f8f9fa;
+  }
+
+  .message-header {
+    font-size: 0.95rem;
+  }
+
+  .message-header strong {
+    color: #212529;
+  }
+
+  .message-header .text-muted {
+    font-size: 0.85rem;
+  }
+
+  /* ===== Empty State ===== */
+  .alert-info {
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+  }
 </style>
 
 <div class="row justify-content-center">
@@ -43,26 +47,31 @@
       </div>
       <div class="card-body">
         {% for m in messages %}
-          <div class="card mb-3 border-0 border-bottom message-card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-2 message-header">
-                <div>
-                  <strong><i class="fas fa-user me-1"></i> {{ m.sender.username }}</strong>
-                  <span class="text-muted ms-2">
-                    <i class="fas fa-box-open me-1"></i> {{ m.product.title }}
-                  </span>
-                </div>
-                <small class="text-muted">
-                  <i class="fas fa-clock me-1"></i> {{ m.created_at }}
-                </small>
+        <div class="card mb-3 border-0 border-bottom message-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2 message-header">
+              <div>
+                <strong><i class="fas fa-user me-1"></i> {{ m.sender.username }}</strong>
+                <span class="text-muted ms-2">
+                  <i class="fas fa-box-open me-1"></i> {{ m.product.title }}
+                </span>
               </div>
-              <p class="mb-0">{{ m.content }}</p>
+              <small class="text-muted">
+                <i class="fas fa-clock me-1"></i> {{ m.created_at }}
+              </small>
+            </div>
+            <p class="mb-0">{{ m.content }}</p>
+            <div class="mt-2 text-end">
+              <a href="{% url 'messaging:reply_message' m.id %}" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-reply me-1"></i> Reply
+              </a>
             </div>
           </div>
+        </div>
         {% empty %}
-          <div class="alert alert-info text-center mb-0">
-            <i class="fas fa-envelope-open-text me-1"></i> No messages yet.
-          </div>
+        <div class="alert alert-info text-center mb-0">
+          <i class="fas fa-envelope-open-text me-1"></i> No messages yet.
+        </div>
         {% endfor %}
       </div>
     </div>

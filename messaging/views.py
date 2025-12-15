@@ -50,3 +50,27 @@ def message_to_seller(request, product_id):
 def inbox(request):
     messages_qs = Message.objects.filter(receiver=request.user).order_by('-created_at')
     return render(request, 'messaging/inbox.html', {'messages': messages_qs})
+
+@login_required
+def reply_message(request, message_id):
+    original_message = get_object_or_404(Message, id=message_id)
+    # Ensure the user is the receiver of the original message
+    if request.user != original_message.receiver:
+        messages.error(request, "You cannot reply to this message.")
+        return redirect('messaging:inbox')
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            Message.objects.create(
+                sender=request.user,
+                receiver=original_message.sender,
+                product=original_message.product,
+                content=form.cleaned_data['content']
+            )
+            messages.success(request, 'Reply sent.')
+            return redirect('messaging:inbox')
+    else:
+        form = MessageForm()
+    
+    return render(request, 'messaging/reply_form.html', {'form': form, 'original_message': original_message})
