@@ -2,176 +2,207 @@
 {% load static %}
 {% block content %}
 <style>
-  /* ===== Card Styling ===== */
-  .card {
-    border: none;
-    border-radius: 0.75rem;
-    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.05);
+  .product-gallery {
+    position: sticky;
+    top: 6rem;
   }
 
-  /* ===== Product Image ===== */
-  .card img {
-    object-fit: cover;
-    height: 100%;
-    border-top-left-radius: 0.75rem;
-    border-bottom-left-radius: 0.75rem;
+  .main-image-container {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    margin-bottom: 1rem;
   }
 
-  /* ===== Typography ===== */
-  .card-title {
+  .main-image-container img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  .product-title {
     font-size: 1.5rem;
-    font-weight: 700;
-  }
-
-  .lead {
-    font-size: 1.2rem;
-  }
-
-  .text-success {
-    color: #28a745 !important;
-  }
-
-  /* ===== Stock Badge ===== */
-  .badge {
-    font-size: 0.9rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.4rem;
-  }
-
-  /* ===== Buttons ===== */
-  .btn {
-    border-radius: 0.4rem;
     font-weight: 500;
+    color: var(--text-main);
+    line-height: 1.3;
   }
 
-  .btn-success {
-    background-color: #28a745;
-    border: none;
-    color: #fff;
+  .product-price {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-main);
   }
 
-  .btn-success:hover {
-    background-color: #218838;
-  }
-
-  .btn-outline-primary {
-    border-color: #007bff;
-    color: #007bff;
-  }
-
-  .btn-outline-primary:hover {
-    background-color: #e6f0ff;
-    color: #005bb5;
-  }
-
-  .btn-secondary {
-    background-color: #6c757d;
-    border: none;
-    color: #fff;
-  }
-
-  .btn-secondary:hover {
-    background-color: #5a6268;
-  }
-
-  /* ===== Suggested Products ===== */
-  .card .card-title {
+  .action-btn {
+    padding: 0.8rem;
     font-size: 1rem;
+    text-transform: uppercase;
     font-weight: 600;
+    border-radius: 2px;
   }
 
-  .card .card-body p {
+  .btn-buy-now {
+    background: var(--secondary);
+    color: white;
+  }
+
+  .btn-buy-now:hover {
+    background: #e85d17;
+    color: white;
+  }
+
+  .btn-add-cart {
+    background: var(--warning);
+    color: white;
+  }
+
+  .btn-add-cart:hover {
+    background: #e68e00;
+    color: white;
+  }
+
+  /* Feature list */
+  .feature-list li {
+    margin-bottom: 0.5rem;
     font-size: 0.9rem;
+    color: var(--text-main);
   }
 
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  .feature-list i {
+    color: var(--primary);
+    width: 20px;
   }
 </style>
 
-<div class="row justify-content-center">
-  <div class="col-md-10">
-    <div class="card shadow-sm border-0">
-      <div class="row g-0">
-        <!-- Product Image -->
-        <div class="col-md-6">
+<div class="container py-4">
+  <div class="row g-4">
+    <!-- Left Column: Images -->
+    <div class="col-md-5">
+      <div class="product-gallery">
+        <div class="main-image-container">
           {% if product.image %}
-          <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="{{ product.title }}">
+          <img src="{{ product.image.url }}" alt="{{ product.title }}">
           {% else %}
-          <img src="{% static 'images/placeholder.png' %}" class="img-fluid rounded-start" alt="No image">
+          <img src="{% static 'images/placeholder.png' %}" alt="No image">
           {% endif %}
         </div>
-
-        <!-- Product Details -->
-        <div class="col-md-6">
-          <div class="card-body">
-            <h2 class="card-title fw-bold mb-3">{{ product.title }}</h2>
-            <p class="lead text-success mb-2">
-              <i class="fas fa-tag me-1"></i> ₹{{ product.price }}
-            </p>
-            <p class="text-muted">{{ product.description }}</p>
-
-            <!-- Stock Badge -->
-            <span class="badge 
-              {% if product.stock > 10 %} bg-success 
-              {% elif product.stock > 0 %} bg-warning 
-              {% else %} bg-danger {% endif %}">
-              {% if product.stock > 0 %} In Stock: {{ product.stock }} {% else %} Out of Stock {% endif %}
-            </span>
-
-            <hr>
-
-            <!-- Action Buttons -->
-            <div class="d-flex flex-column gap-2 mt-3">
-              <a href="{% url 'orders:buy_now' product.id %}" class="btn btn-success fw-semibold">
-                <i class="fas fa-shopping-bag me-1"></i> Buy Now
-              </a>
-              <a href="{% url 'shop:add_to_cart' product.id %}" class="btn btn-outline-primary fw-semibold">
-                <i class="fas fa-cart-plus me-1"></i> Add to Cart
-              </a>
-              <a href="{% url 'messaging:message_to_seller' product.id %}" class="btn btn-secondary fw-semibold">
-                <i class="fas fa-envelope me-1"></i> Message Seller
-              </a>
-            </div>
-          </div>
+        <div class="d-flex gap-2 justify-content-center">
+          <!-- Action Buttons for Mobile (or Desktop if preferred below image) -->
+          <a href="{% url 'shop:add_to_cart' product.id %}" class="btn btn-add-cart action-btn flex-grow-1">
+            <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+          </a>
+          <a href="{% url 'orders:buy_now' product.id %}" class="btn btn-buy-now action-btn flex-grow-1">
+            <i class="fas fa-bolt me-2"></i> Buy Now
+          </a>
         </div>
       </div>
     </div>
 
-    <!-- Suggested Products Section -->
-    <div class="mt-5">
-      <h4 class="fw-semibold mb-3">
-        <i class="fas fa-lightbulb me-1 text-primary"></i> You may also like
-      </h4>
-      <div class="row g-4">
-        {% for suggestion in related_products %}
-        <div class="col-md-3 col-sm-6">
-          <div class="card h-100 shadow-sm border-0">
-            {% if suggestion.image %}
-            <img src="{{ suggestion.image.url }}" class="card-img-top" alt="{{ suggestion.title }}">
-            {% else %}
-            <img src="{% static 'images/placeholder.png' %}" class="card-img-top" alt="No image">
-            {% endif %}
-            <div class="card-body d-flex flex-column">
-              <h6 class="card-title text-truncate">{{ suggestion.title }}</h6>
-              <p class="text-success fw-semibold mb-2">₹{{ suggestion.price }}</p>
-              <a href="{% url 'shop:product_detail' suggestion.id %}"
-                class="btn btn-outline-primary btn-sm mt-auto w-100">
-                <i class="fas fa-eye me-1"></i> View
-              </a>
-            </div>
-          </div>
-        </div>
-        {% empty %}
-        <div class="col-12">
-          <div class="alert alert-light text-center">
-            <i class="fas fa-info-circle me-1"></i> No similar products found.
-          </div>
-        </div>
-        {% endfor %}
+    <!-- Right Column: Details -->
+    <div class="col-md-7">
+      <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb small">
+          <li class="breadcrumb-item"><a href="{% url 'shop:home' %}" class="text-muted">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ product.title|truncatechars:30 }}</li>
+        </ol>
+      </nav>
+
+      <h1 class="product-title mb-2">{{ product.title }}</h1>
+
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <span class="badge bg-success">4.2 <i class="fas fa-star small"></i></span>
+        <span class="text-muted small">1,234 Ratings & 100 Reviews</span>
       </div>
+
+      <div class="mb-4">
+        <div class="d-flex align-items-baseline gap-2">
+          <span class="product-price">₹{{ product.price }}</span>
+          <span class="text-muted text-decoration-line-through">₹{{ product.price|add:"500" }}</span>
+          <span class="text-success fw-bold small">20% off</span>
+        </div>
+        <p class="small text-muted mb-0">Inclusive of all taxes</p>
+      </div>
+
+      <!-- Offers Section -->
+      <div class="mb-4">
+        <h6 class="fw-bold mb-2">Available Offers</h6>
+        <ul class="list-unstyled feature-list">
+          <li><i class="fas fa-tag"></i> <strong>Bank Offer</strong> 5% Unlimited Cashback on Axis Bank Credit Card</li>
+          <li><i class="fas fa-tag"></i> <strong>Special Price</strong> Get extra ₹500 off (price inclusive of discount)
+          </li>
+          <li><i class="fas fa-tag"></i> <strong>Partner Offer</strong> Sign up for Pay Later and get ₹100 Gift Card
+          </li>
+        </ul>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-4">
+        <h6 class="fw-bold mb-2">Product Description</h6>
+        <p class="text-muted" style="line-height: 1.6;">{{ product.description }}</p>
+      </div>
+
+      <!-- Seller Info -->
+      <div class="card bg-light border-0 mb-4">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <span class="text-muted small">Sold by</span>
+            <h6 class="mb-0 text-primary">E-Point Retail</h6>
+          </div>
+          <a href="{% url 'messaging:message_to_seller' product.id %}" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-comment-alt me-1"></i> Chat with Seller
+          </a>
+        </div>
+      </div>
+
+      <!-- Stock Status -->
+      {% if product.stock > 0 %}
+      {% if product.stock < 10 %} <p class="text-danger fw-bold">Hurry, Only {{ product.stock }} left!</p>
+        {% else %}
+        <p class="text-success fw-bold">In Stock</p>
+        {% endif %}
+        {% else %}
+        <p class="text-danger fw-bold">Currently Out of Stock</p>
+        {% endif %}
+
+    </div>
+  </div>
+
+  <!-- Similar Products -->
+  <div class="mt-5 pt-4 border-top">
+    <h4 class="fw-bold mb-4">Similar Products</h4>
+    <div class="row g-3">
+      {% for suggestion in related_products %}
+      <div class="col-6 col-md-3">
+        <div class="card product-card">
+          <a href="{% url 'shop:product_detail' suggestion.id %}" class="text-decoration-none">
+            <div class="product-img-container" style="height: 150px;">
+              {% if suggestion.image %}
+              <img src="{{ suggestion.image.url }}" alt="{{ suggestion.title }}">
+              {% else %}
+              <img src="{% static 'images/placeholder.png' %}" alt="No image">
+              {% endif %}
+            </div>
+            <div class="card-body p-2">
+              <h6 class="card-title text-truncate mb-1 text-dark small">{{ suggestion.title }}</h6>
+              <div class="d-flex align-items-baseline gap-2">
+                <span class="fw-bold text-dark">₹{{ suggestion.price }}</span>
+                <span class="text-muted small text-decoration-line-through" style="font-size: 0.75rem;">₹{{
+                  suggestion.price|add:"200" }}</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center text-muted">
+        <p>No similar products found.</p>
+      </div>
+      {% endfor %}
     </div>
   </div>
 </div>
