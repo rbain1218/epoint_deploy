@@ -22,7 +22,7 @@
         <i class="fas fa-shopping-bag me-2"></i>
         <span>E-Point</span>
       </a>
-      
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -43,7 +43,7 @@
             </a>
           </li>
           {% endif %}
-          
+
           <li class="nav-item">
             <a class="nav-link d-flex flex-column align-items-center" href="{% url 'messaging:inbox' %}">
               <i class="fas fa-comment-alt mb-1"></i>
@@ -52,35 +52,42 @@
           </li>
 
           {% if user.is_authenticated %}
-            {% if not user.is_superuser %}
-            <li class="nav-item">
-              <a class="nav-link d-flex flex-column align-items-center" href="{% url 'orders:cart' %}">
-                <i class="fas fa-shopping-cart mb-1"></i>
-                <span class="small">Cart</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex flex-column align-items-center" href="{% url 'orders:order_list' %}">
-                <i class="fas fa-box mb-1"></i>
-                <span class="small">Orders</span>
-              </a>
-            </li>
-            {% endif %}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                <div class="d-flex flex-column align-items-start">
-                  <span class="small text-muted" style="font-size: 0.75rem;">Hello,</span>
-                  <span class="fw-bold" style="line-height: 1;">{{ user.username }}</span>
-                </div>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
-              </ul>
-            </li>
+          {% if not user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center" href="{% url 'orders:cart' %}">
+              <i class="fas fa-shopping-cart mb-1"></i>
+              <span class="small">Cart</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center" href="{% url 'orders:order_list' %}">
+              <i class="fas fa-box mb-1"></i>
+              <span class="small">Orders</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center" href="{% url 'messaging:contact_admin' %}">
+              <i class="fas fa-headset mb-1"></i>
+              <span class="small">Contact</span>
+            </a>
+          </li>
+          {% endif %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+              data-bs-toggle="dropdown">
+              <div class="d-flex flex-column align-items-start">
+                <span class="small text-muted" style="font-size: 0.75rem;">Hello,</span>
+                <span class="fw-bold" style="line-height: 1;">{{ user.username }}</span>
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+              <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
+            </ul>
+          </li>
           {% else %}
-            <li class="nav-item">
-              <a class="btn btn-primary px-4" href="{% url 'accounts:login' %}">Login</a>
-            </li>
+          <li class="nav-item">
+            <a class="btn btn-primary px-4" href="{% url 'accounts:login' %}">Login</a>
+          </li>
           {% endif %}
         </ul>
       </div>
@@ -98,7 +105,7 @@
       {% endfor %}
     </div>
     {% endif %}
-    
+
     {% block content %}{% endblock %}
   </main>
 
