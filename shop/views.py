@@ -1,16 +1,35 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Product, OfferBanner
+from .models import Product, OfferBanner, Category
 from .forms import ProductForm
 from orders.cart import Cart
 
 def home(request):
+    default_categories = [
+        {'name': 'Mobiles', 'slug': 'mobiles'},
+        {'name': 'Fashion', 'slug': 'fashion'},
+        {'name': 'Electronics', 'slug': 'electronics'},
+        {'name': 'Home', 'slug': 'home'},
+        {'name': 'Sports', 'slug': 'sports'},
+    ]
+
+    categories = list(Category.objects.all())
+    if not categories:
+        for item in default_categories:
+            Category.objects.get_or_create(name=item['name'], slug=item['slug'])
+        categories = list(Category.objects.all())
+
     products = Product.objects.order_by('-created_at')
     active_offer = OfferBanner.objects.filter(is_active=True).first()
-    return render(request, 'shop/home.html', {'products': products, 'offer': active_offer})
+    return render(request, 'shop/home.html', {'products': products, 'offer': active_offer, 'categories': categories})
 
 from .recommendations import get_similar_products
+
+def category_products(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    products = category.products.order_by('-created_at')
+    return render(request, 'shop/category_detail.html', {'category': category, 'products': products})
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)

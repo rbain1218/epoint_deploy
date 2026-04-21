@@ -116,36 +116,36 @@
 <div class="container">
   <!-- Categories -->
   <div class="row mb-5 g-4 justify-content-center">
-    <div class="col-auto">
-      <div class="category-item">
-        <div class="category-icon"><i class="fas fa-mobile-alt"></i></div>
-        <span class="fw-semibold small">Mobiles</span>
+    {% if categories %}
+      {% for category in categories %}
+      <div class="col-auto">
+        <a href="{% url 'shop:category_products' category.slug %}" class="text-decoration-none text-dark">
+          <div class="category-item">
+            <div class="category-icon">
+              {% if category.slug == 'mobiles' %}
+                <i class="fas fa-mobile-alt"></i>
+              {% elif category.slug == 'fashion' %}
+                <i class="fas fa-tshirt"></i>
+              {% elif category.slug == 'electronics' %}
+                <i class="fas fa-laptop"></i>
+              {% elif category.slug == 'home' %}
+                <i class="fas fa-couch"></i>
+              {% elif category.slug == 'sports' %}
+                <i class="fas fa-basketball-ball"></i>
+              {% else %}
+                <i class="fas fa-tags"></i>
+              {% endif %}
+            </div>
+            <span class="fw-semibold small">{{ category.name }}</span>
+          </div>
+        </a>
       </div>
-    </div>
-    <div class="col-auto">
-      <div class="category-item">
-        <div class="category-icon"><i class="fas fa-tshirt"></i></div>
-        <span class="fw-semibold small">Fashion</span>
+      {% endfor %}
+    {% else %}
+      <div class="col-12 text-center text-muted">
+        <p>No categories available yet.</p>
       </div>
-    </div>
-    <div class="col-auto">
-      <div class="category-item">
-        <div class="category-icon"><i class="fas fa-laptop"></i></div>
-        <span class="fw-semibold small">Electronics</span>
-      </div>
-    </div>
-    <div class="col-auto">
-      <div class="category-item">
-        <div class="category-icon"><i class="fas fa-couch"></i></div>
-        <span class="fw-semibold small">Home</span>
-      </div>
-    </div>
-    <div class="col-auto">
-      <div class="category-item">
-        <div class="category-icon"><i class="fas fa-running"></i></div>
-        <span class="fw-semibold small">Sports</span>
-      </div>
-    </div>
+    {% endif %}
   </div>
 
   <!-- Products Header -->

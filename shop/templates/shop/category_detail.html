@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+  .product-card {
+    border: 1px solid var(--border-color);
+    transition: box-shadow 0.2s;
+    height: 100%;
+    background: white;
+    position: relative;
+  }
+
+  .product-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .product-img-container {
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: #fff;
+  }
+
+  .product-img-container img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    transition: transform 0.3s;
+  }
+
+  .product-card:hover .product-img-container img {
+    transform: scale(1.05);
+  }
+
+  .discount-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #388e3c;
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+</style>
+
+<div class="container py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+        </ol>
+      </nav>
+      <h2 class="fw-bold">{{ category.name }}</h2>
+      <p class="text-muted">Explore all products listed under the {{ category.name }} category.</p>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    {% for product in products %}
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card product-card">
+        <div class="discount-badge">20% OFF</div>
+        <a href="{% url 'shop:product_detail' product.id %}" class="text-decoration-none">
+          <div class="product-img-container">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+            {% else %}
+            <img src="{% static 'images/placeholder.png' %}" alt="No image">
+            {% endif %}
+          </div>
+          <div class="card-body p-3">
+            <h6 class="card-title text-truncate mb-1 text-dark" style="font-size: 0.95rem;">{{ product.title }}</h6>
+            <div class="mb-1">
+              <span class="badge bg-success" style="font-size: 0.7rem;">4.2 <i class="fas fa-star small"></i></span>
+              <span class="text-muted small ms-1">(123)</span>
+            </div>
+            <div class="d-flex align-items-baseline gap-2">
+              <span class="fw-bold fs-5 text-dark">₹{{ product.price }}</span>
+              <span class="text-muted small text-decoration-line-through">₹{{ product.price|add:"500" }}</span>
+            </div>
+            {% if product.stock < 5 %}
+            <p class="text-danger small mb-0 mt-1 fw-semibold">Only {{ product.stock }} left!</p>
+            {% endif %}
+          </div>
+        </a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info text-center py-5">
+        <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+        <h5>No products found</h5>
+        <p class="text-muted">No products are available in this category yet.</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
